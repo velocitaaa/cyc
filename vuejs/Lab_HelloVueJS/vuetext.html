@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+
+    *{
+        text-align: center;
+        letter-spacing: 1.5px;
+        margin: 0px;
+        padding: 0px;
+        list-style-type: 0;
+        text-indent: 0;
+        list-style: none;
+    }
+    hr{
+        margin: 10px 0
+    }
+
+    article{
+        width: 80%;
+        margin: 0 auto;
+        border: 1px #000 solid;
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    #app1{
+        font-size: 30px;
+        color: red;
+    }
+
+</style>
+<body>
+    <article id="app1">
+        <p>{{message}}</p>
+        <button v-on:click="messageReverse()">go</button>
+        <hr>
+        <p>數字的2倍:{{numbers.map( x => x * 2)}}</p>
+        <hr>
+        <div>
+            <input type="text" v-model="yourname" :placeholder="placeholder">
+            <button value="sent" @click="sayHi()">Sent</button>
+        </div>
+    </article>
+    <article id="app2">
+        <p :title="mousedown">請把滑鼠移動到文字上看看有啥!</p>
+    </article>
+    <article id="app3">
+        <span v-if="seen">看到了!!</span>
+        <input type="text" v-model="seen">
+    </article>
+    <article id="app4">
+        <ul>
+            <li v-for='(items,index) in lilist'>
+                <p>{{index}}. {{items.name}} is {{items.gender}}</p>
+            </li>
+        </ul>
+    </article>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+
+let appA = new Vue({
+    el: '#app1',
+    data: {
+        message: 'hello!',
+        yourname: 'dora',
+        numbers: [1,2,3,4,5],
+        placeholder: '請輸入您的名字'
+    },
+    methods: {
+        sayHi(){
+            alert(`hi, ${this.yourname}`)
+        },
+        messageReverse(){
+            this.message = this.message.split('').reverse().join(' ')
+        }
+    }
+})
+
+let appB = new Vue({
+    el: '#app2',
+    data: {
+        mousedown: '載入' + new Date().toDateString()
+    }
+})
+
+let appC = new Vue({
+    el: '#app3',
+    data: {
+        seen: true,
+    }
+})
+
+let appD = new Vue({
+    el: '#app4',
+    data: {
+        lilist: [
+            {
+                name: 'jack',
+                gender: 'male'
+            },{
+                name: 'lucy',
+                gender: 'Female'
+            },{
+                name: 'eirc',
+                gender: 'male'
+            },{
+                name: 'lirs',
+                gender: 'Female'
+            },
+        ]
+    }
+})
+
+</script>
+</html>

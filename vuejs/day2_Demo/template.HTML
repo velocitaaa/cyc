@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="lab">
+        First name: <input type="text" v-model="firstName"><br>
+        Last name: <input type="text" v-model="lastName">
+        <hr>
+        Full name: {{fullName | toUpper}}
+    </div>
+
+    <div id="clickbutton">
+        <!-- 直接寫在畫面上兩個button會同步,如果要分開需要寫成component -->
+        <!-- <button v-on:click='nth++'>點擊次數:{{nth}}</button>
+        <button v-on:click='nth++'>點擊次數:{{nth}}</button> -->
+        <click-button v-bind:init-count="20" v-on:cclick="totalnth++"></click-button>
+        <click-button v-bind:init-count="0" v-on:cclick="totalnth++"></click-button>
+        total: {{totalnth}}
+    </div>
+
+    <script>
+
+        // 獨立的元素有各自的nth資料
+        Vue.component('click-button',{
+            // html元件要新增新屬性,接受外界送來的資料要用props定義新屬性
+            // !!!!會自動把大寫變成小寫,前面加上 - 
+            props: ['initCount'],
+            // !!!!這裡的data不能直接寫成物件,要寫成function
+            data: function(){
+                return {
+                    nth: this.initCount,
+                }
+            },
+            template: `
+                <button v-on:click='nth++; $emit("cclick")'>
+                    點擊次數:{{nth}}
+                </button>` 
+            // $emit表示接收
+            // template: "<button v-on:click='nth++'>點擊次數:{{nth}}</button>"
+        })
+
+        //樣板字串 : 改成撇號可以換行 / 而且不用像以前還要分開用+
+        var x = 100;
+        var result = `x = ${x}`;
+        /////////////////////////////////////////////
+
+        let clickApp = new Vue({
+            el: '#clickbutton',
+            data: {
+                totalnth: 20,
+            },
+            methods: {
+
+            }
+        })
+
+    </script>
+
+
+    <script>
+
+        // 共用的filter函式,每個app都可以使用!!
+        Vue.filter('toUpper', function (value) {
+            return value.toUpperCase();
+        });
+
+        let labApp = new Vue({
+            el: '#lab',
+            data: {
+                firstName: '',
+                lastName: '',
+                fullName: '',
+            },
+            methods: {
+                toFullname: function () {
+                    this.fullName = this.firstName + ' ' + this.lastName
+                }
+            },
+            // computed用來處理data屬性,會去判斷抓取現在的最新data,呼叫方式跟data一樣
+            // 直接監控firs跟last兩個資料做處理(比較快速,建議先用這個在考慮下面的方式)
+            computed: {
+                // fullName: function() {
+                //     return this.firstName + ' ' + this.lastName
+                // }
+            },
+            // 監控firstName資料有改變才會改變,如果更動lastName也要改變fullName要加上,
+            // lastName的監控(事件相同)
+            watch: {
+                firstName: function () {
+                    this.toFullname();
+                },
+                lastName: function () {
+                    this.toFullname();
+                }
+            },
+            // 過濾器 - 資料的格式轉換,用 | 表示資料餵給哪隻funciton
+            // 可以餵給很多隻,越左邊越先執行,不破壞資料的情況下改變顯示結果
+            // ex: 資料格式轉換
+            filters: {
+                toUpper: function (value) {
+                    return value.toUpperCase();
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>

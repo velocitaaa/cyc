@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+</head>
+<body>
+    <div id="debug"></div>
+    <script>
+        var obj = {
+            firstName: "Jeremy",
+            lastName: "Lin",
+            hello:function(){
+                alert('hello')
+            },
+            hi:function(){
+                alert('hi')
+            },
+        }
+        
+        // debug.innerText = obj.firstName;
+        // debug.innerText = obj["lastName"];
+        
+        // obg.backNumber = 7
+        obj["backNumber"] = 7;
+        
+        debug.innerText = obj.backNumber;
+
+        ///////////////////////////////////////
+
+        // obj.hello();
+        var p = "hi"
+        obj[p]();
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/jquery.toast.css">
+    <title>Vue練習</title>
+</head>
+
+<style>
+    #latestNews li {
+        position: relative;
+    }
+
+    #latestNews li p {
+        width: calc(100% - 60px);
+        display: inline-block;
+    }
+
+    #latestNews li .buttonbox {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+    }
+</style>
+
+<body>
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4" id="app">
+                    <h2>{{message}}
+                        <span class="pull-right">
+                            <button id="newItem" @click="addClick()" class="btn btn-success btn-sm">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                    </h2>
+                    <ul id="latestNews" class="list-group">
+                        <li class="list-group-item" v-for="(items,index) in itemslist">
+                            <p>公告: {{items.title}}</p>
+                            <p>發布時間: {{items.ymd}}</p>
+                            <span class="pull-right buttonbox">
+                                <button class="btn btn-info btn-xs editItem" v-on:click="editClick(index)">
+                                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+                                </button>
+                                <button class="btn btn-danger btn-xs deleteItem" v-on:click="deleteClick(index)">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </article>
+    <!-- 燈箱 -->
+    <div id="newsModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4>新增/修改</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="titleTextBox">
+                                <span class="glyphicon glyphicon-bullhorn"></span>
+                                標題
+                            </label>
+                            <input type="text" v-model="title" id="titleTextBox" class="form-control"
+                                placeholder="請輸入標題" />
+                        </div>
+                        <div class="form-group">
+                            <label for="ymdTextBox">
+                                <span class="glyphicon glyphicon-time"></span>
+                                日期
+                            </label>
+                            <input type="text" id="ymdTextBox" v-model="ymd" class="form-control"
+                                placeholder="yyyy-mm-dd 例如: 2017-05-20">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <div class="pull-right">
+                        <button type="button" id="okButton" @click="successClick()" class="btn btn-success">
+                            <span class="glyphicon glyphicon-ok"></span> 確定
+                        </button>
+                        <button type="button" id="cancelButton" @click="cancelClick()" class="btn btn-default"
+                            data-dismiss="modal">
+                            <span class="glyphicon glyphicon-remove"></span> 取消
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /對話盒 -->
+    <script src="js/jquery.js"></script>
+    <script src="js/jquery.toast.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let app = new Vue({
+            el: '#app',
+            data: {
+                message: '最新消息',
+                itemslist: [
+                    {
+                        id: '0',
+                        title: '第一則消息',
+                        ymd: '2019-09-09'
+                    },
+                    {
+                        id: '1',
+                        title: '第二則消息',
+                        ymd: '2019-03-04'
+                    },
+                    {
+                        id: '2',
+                        title: '第三則消息',
+                        ymd: '2019-03-03'
+                    },
+                ],
+            },
+            methods: {
+                addClick() {
+                    newsModelApp.title = '',
+                    newsModelApp.ymd = '',
+                    newsModelApp.id = -1;
+                    $('#newsModal').modal({ backdrop: 'static' });
+                },
+                editClick(index) {
+                    newsModelApp.title = this.itemslist[index].title
+                    newsModelApp.ymd = this.itemslist[index].ymd
+                    newsModelApp.id = index
+                    $('#newsModal').modal({ backdrop: 'static' });
+                },
+                deleteClick(index) {
+                    this.itemslist.splice(index,1);
+                    console.log('123')
+                }
+            }
+
+        })
+
+    </script>
+    <script>
+
+        let newsModelApp = new Vue({
+            el: '#newsModal',
+            data: {
+                ymd: '',
+                title: '',
+                id: '',
+            },
+            methods: {
+                successClick() {
+
+                    if (this.id == -1) {
+                        let newsItem = {
+                            title: this.title,
+                            ymd: this.ymd,
+                        }
+                        if (this.title <= 0) {
+                            alert('請填寫資料!')
+                        } else {
+                            app.itemslist.push(newsItem);
+                            $('#newsModal').modal('hide');
+                        }
+                        
+                    } else {
+                        app.itemslist[this.id].title = this.title;
+                        app.itemslist[this.id].ymd = this.ymd;
+                        $('#newsModal').modal('hide');
+                    }
+                    
+
+                    
+                },
+                cancelClick() {
+                    $('#newsModal').modal('hide');
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

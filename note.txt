@@ -1,0 +1,26 @@
+<JS>
+
+setInterval(fun,1000)
+固定延遲了某段時間之後，才去執行對應的程式碼，然後「不斷循環」
+
+
+<推薦軟體>
+Fiddler
+可以查看http與通訊協定的來源跟過程(在raw 回程內容)
+
+功能inspectors
+查看詳細內容
+access-control-allow-origin: * ((允許不同domain網域也可以存取，*開綠燈))
+
+功能composer
+可以模擬api post get put...
+
+<跨域問題>
+方法(http https ftp)不同視為不同
+機器名稱不同視為不同
+port不同視為不同
+
+-----------------------------------
+https://github.com/axios/axios
+
+Math.pow(10,3) 10的三次方
