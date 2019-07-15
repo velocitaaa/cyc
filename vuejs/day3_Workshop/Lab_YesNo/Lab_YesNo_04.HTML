@@ -59,12 +59,15 @@
                 questionChanged: function () {
                     let question = this.question;
                     let _this = this;
+                    console.log('ll')
                     if (question.indexOf("?") >= 0) {
                         axios
                             .get("https://yesno.wtf/api")
                             .then(function (response) {
                                 _this.answer = response.data.answer;
                                 _this.image = response.data.image;
+
+                                console.log('123')
                             })
                     }
                 }
