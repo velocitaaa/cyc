@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>todoList</title>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 
 <style>
@@ -54,8 +54,13 @@
     }
 
     .postitbox .postit.finished {
-        opacity: .8;
+        opacity: .5;
         background-color: rgb(88, 88, 88) !important;
+        box-shadow: 0px 2px 6px rgba(0, 0, 0, 0);
+    }
+
+    .postitbox .postit.finished .checkicon {
+        display: none;
     }
 
     .colornav {
@@ -156,27 +161,24 @@
 
 </script>
 <script>
-
-$(document).ready(function(){
+    $(document).ready(function () {
         $("#datepicker").datepicker();
         todoListApp.getdata();
     })
 
-    let colorData = [
-        {
-            name: 'yellow',
-            color: '#FFEB67',
-        }, {
-            name: 'blue',
-            color: '#A5D8D6',
-        }, {
-            name: 'red',
-            color: '#EF898C',
-        }, {
-            name: 'green',
-            color: '#CBE196',
-        },
-    ]
+    let colorData = [{
+        name: 'yellow',
+        color: '#FFEB67',
+    }, {
+        name: 'blue',
+        color: '#A5D8D6',
+    }, {
+        name: 'red',
+        color: '#EF898C',
+    }, {
+        name: 'green',
+        color: '#CBE196',
+    }, ]
 
     const dataurl = 'http://5d2bf29f8c90070014971ec5.mockapi.io/listapi';
     var Today = new Date();
@@ -198,19 +200,6 @@ $(document).ready(function(){
                     url: dataurl
                 }).then(function (data) {
                     ele.postitlist = data.data;
-                    
-
-                    $.each(data.data,function(){
-                        let _this = $(this);
-                        if (_this.finished = '0'){
-                            let _id = '#finished' + _this.id
-                            $(_id).prop("checked", true);
-                            console.log(_this) 
-                        }
-
-                        console.log(_this.finished)
-                    })
-                    
                 })
 
             },
@@ -240,7 +229,7 @@ $(document).ready(function(){
                 let ele = this;
                 axios({
                     method: 'delete',
-                    url: dataurl  + '/' + items.id,
+                    url: dataurl + '/' + items.id,
                 }).then(function (data) {
                     ele.getdata();
                 })
@@ -271,7 +260,7 @@ $(document).ready(function(){
 
             checkFinish(items) {
 
-                let isover="";
+                let isover = "";
 
                 if (items.finished.length > 0) {
                     items.finished = ''
@@ -301,12 +290,6 @@ $(document).ready(function(){
         },
 
     });
-
-    
-
-    
-
-
 </script>
 
 </html>
